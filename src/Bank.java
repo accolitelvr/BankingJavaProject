@@ -1,5 +1,3 @@
-import java.security.Security;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
@@ -28,6 +26,12 @@ public class Bank {
             return Ledger.get(AccountNo).enquire(password);
             }
         }
+
+    String info(Integer AccountNo, String password, Integer ID) {
+        synchronized (Ledger.get(AccountNo)) {
+            return Ledger.get(AccountNo).info(password);
+        }
+    }
 
     Boolean enquiry(Integer AccountNo, String password, Float change, Integer ID) {
         synchronized (Ledger.get(AccountNo)) {

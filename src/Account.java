@@ -1,24 +1,20 @@
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 final class Account{
 
-    ArrayList<String> name;
-    String Surname;
-    ArrayList<String> Address;
-    float Overdraft;
-    float Balance;
-    HashMap<Integer, Statement> StatementLog;
+    private String[] Name;
+    private String Surname;
+    private String[] Address;
+    private float Overdraft;
+    private float Balance;
+    private HashMap<Integer, Statement> StatementLog = new HashMap<>();
     private String Password;
     private boolean Locked;
-    Integer Security;
+    private Integer Security;
 
-    Account(ArrayList<String> name, String Surname, ArrayList<String> Address, float Overdraft)
+    Account(String[] name, String Surname, String[] Address, float Overdraft)
     {
-        this.name = name;
+        this.Name = name;
         this.Surname = Surname;
         this.Address = Address;
         this.Overdraft = Overdraft;
@@ -38,28 +34,34 @@ final class Account{
     }
 
     public boolean deposit(String password, float money, int ID) {
-        if ((PasswordCheck(password) == true) && (this.Overdraft < this.Balance + money)) {
+        if ((PasswordCheck(password)) && (this.Overdraft < this.Balance + money)) {
             Statement statement = new Statement(ID, this.Balance, money, this.Balance + money);
             statement.setTime();
             this.Balance += money;
             Set<Integer> keys = StatementLog.keySet();
             int StatementNextID = Collections.max(keys);
 
-            StatementLog.put(StatementNextID, statement);
-        }
+            StatementLog.put(StatementNextID, statement);        }
         return false;
     }
     public float enquire(String password) {
-        if (PasswordCheck(password) == true) {
+        if (PasswordCheck(password)) {
             return this.Balance;
         }
         return 0;
     }
 
+    public String info(String password) {
+        if (PasswordCheck(password)) {
+            return (this.Name + this.Surname +", " + Address);
+        }
+        return "";
+    }
+
 
 
     boolean PasswordCheck(String password) {
-            if ((this.Locked == false) && (password == this.Password)) {
+            if ((!this.Locked) && (Objects.equals(password, this.Password))) {
                 return true;
             } else {
                 this.Security += 1;
